@@ -1,0 +1,7 @@
+{
+  "name": "fixed-calender",
+  "start": "bun run start",
+  "build": "bun run build",
+  "domain": "calendar.sahajjain.com",
+  "branch": "main"
+}

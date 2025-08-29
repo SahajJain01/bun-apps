@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" ng-app="ifc">
+
+<head>
+  <!-- Meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
+  <link href="assets/css/style.css" rel="stylesheet" />
+
+  <title>Fixed Calendar</title>
+</head>
+
+<body class="bg-dark" ng-controller="MainCtrl" >
+  <div class="container">
+    <div ng-repeat="year in years">
+      <div class="year-header">
+        <div class="year-bar d-flex flex-column align-items-center">
+          <div class="year-controls d-flex align-items-center gap-2">
+            <button class="btn btn-outline-light btn-sm icon-btn" aria-label="Previous year" ng-click="changeYear(-1)">
+              <i class="bi bi-caret-left-fill"></i>
+            </button>
+            <h1 class="text-light text-center year-title m-0">{{year}}</h1>
+            <button class="btn btn-outline-light btn-sm icon-btn" aria-label="Next year" ng-click="changeYear(1)">
+              <i class="bi bi-caret-right-fill"></i>
+            </button>
+          </div>
+          <button class="btn btn-outline-light btn-sm today-btn mt-2" ng-click="goToday()" aria-label="Jump to today">Today</button>
+        </div>
+      </div>
+      <div class="months-grid">
+        <div class="month-card" ng-repeat="month in months track by $index">
+          <h6 class="text-light text-center month-title">{{months[$index]}}</h6>
+          <table class="table table-dark table-sm table-borderless text-center month-table">
+            <thead>
+              <tr>
+                <th scope="col">S</th>
+                <th scope="col">M</th>
+                <th scope="col">T</th>
+                <th scope="col">W</th>
+                <th scope="col">T</th>
+                <th scope="col">F</th>
+                <th scope="col">S</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="week in [].constructor(4) track by $index">
+                <td ng-repeat="day in [].constructor(7) track by $index"
+                  id="{{$parent.$parent.$index*28 + $parent.$index*7 + $index + 1}}">
+                    <span class="day" 
+                      ng-class="{'is-today': $parent.$parent.$index*28 + $parent.$index*7 + $index + 1 == absDate && year == currentYear}">
+                      {{ ($parent.$index * 7) + $index + 1 }}
+                    </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="month-card">
+          <h6 class="text-light text-center month-title">New Year Day(s)</h6>
+          <table class="table table-dark table-sm table-borderless text-center month-table">
+            <thead>
+              <tr>
+                <th scope="col">NYD</th>
+                <th ng-if="leap(year)">NYD2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="365"><span class="day" ng-class="{'is-today':absDate == 365 && year == currentYear}">1</span></td>
+                <td id="366" ng-if="leap(year)"><span class="day" ng-class="{'is-today':absDate == 366 && year == currentYear}">2</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Scripts -->
+  <script src="assets/libs/angular.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,9 +1,0 @@
-{
-  "name": "demo",
-  "branch": "main",
-  "port": 3001,
-  "start": "bun run start",
-  "build": null,
-  "domain": null
-}
-
