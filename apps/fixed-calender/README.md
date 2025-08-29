@@ -49,3 +49,4 @@ npx http-server -p 3000 -c-1
 - `app.js` — AngularJS controller and logic
 - `assets/` — styles and libraries
 - `server.js` — minimal static web server
+
