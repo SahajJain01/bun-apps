@@ -1,0 +1,111 @@
+name: Monorepo CI & Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/**'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or ref to checkout for manual run'
+        required: false
+        type: string
+        default: ''
+      test_webhook_only:
+        description: 'Only trigger /sync without building'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: monorepo-ci-and-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.test_webhook_only) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Determine changed apps
+        id: changed
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            apps/**
+          dir_names: true
+          dir_names_max_depth: 2
+          since_last_remote_commit: true
+
+      - name: Build changed apps
+        if: ${{ steps.changed.outputs.all_changed_files != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Changed app directories: ${{ steps.changed.outputs.all_changed_files }}"
+          for app in ${{ steps.changed.outputs.all_changed_files }}; do
+            echo "::group::Build $app"
+            if [ -f "$app/package.json" ]; then
+              pushd "$app" >/dev/null
+              bun install
+              if node -e "try{const p=require('./package.json');process.exit(p.scripts&&p.scripts.build?0:1)}catch(e){process.exit(1)}"; then
+                bun run build
+              else
+                echo "No build script detected; skipping build."
+              fi
+              popd >/dev/null
+            else
+              echo "No package.json in $app; skipping bun install/build."
+            fi
+            echo "::endgroup::"
+          done
+
+      - name: No app changes
+        if: ${{ steps.changed.outputs.all_changed_files == '' }}
+        run: echo "No changes under apps/**; skipping build."
+
+  trigger-sync:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger NixOS sync webhook
+        env:
+          BUN_SYNC_TOKEN: ${{ secrets.BUN_SYNC_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BUN_SYNC_TOKEN:-}" ]; then
+            echo "Secret BUN_SYNC_TOKEN is not set." >&2
+            exit 1
+          fi
+          curl -fsSL -X POST "https://deploy.sahajjain.com/sync" \
+            -H "x-webhook-token: ${BUN_SYNC_TOKEN}" \
+            --retry 5 --retry-all-errors --max-time 30
+
+  test-webhook:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.test_webhook_only }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger NixOS sync webhook (test only)
+        env:
+          BUN_SYNC_TOKEN: ${{ secrets.BUN_SYNC_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BUN_SYNC_TOKEN:-}" ]; then
+            echo "Secret BUN_SYNC_TOKEN is not set." >&2
+            exit 1
+          fi
+          curl -fsSL -X POST "https://deploy.sahajjain.com/sync" \
+            -H "x-webhook-token: ${BUN_SYNC_TOKEN}" \
+            --retry 5 --retry-all-errors --max-time 30
+
