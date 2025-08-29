@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "bun server.js",
+    "prod": "bun server.js",
     "start:node": "node server.js"
   }
 }
