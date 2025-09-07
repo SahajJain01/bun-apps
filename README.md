@@ -69,20 +69,20 @@ bunx serve apps/pizza-calc -l 5173
 
 ```text
 bun-apps/
-├─ apps/
-│  ├─ fixed-calender/
-│  │  ├─ index.html
-│  │  ├─ app.js
-│  │  ├─ server.js
-│  │  ├─ bun-app.json
-│  │  └─ assets/
-│  └─ pizza-calc/
-│     ├─ index.html
-│     ├─ index.js
-│     ├─ style.css
-│     └─ package.json
-├─ .github/workflows/monorepo.yml
-└─ README.md
+- apps/
+  - fixed-calender/
+    - index.html
+    - app.js
+    - server.js
+    - bun-app.json
+    - assets/
+  - pizza-calc/
+    - index.html
+    - index.js
+    - style.css
+    - package.json
+- .github/workflows/monorepo.yml
+- README.md
 ```
 
 ## CI/CD
