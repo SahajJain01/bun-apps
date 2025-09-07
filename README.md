@@ -28,7 +28,7 @@ Curated set of small web apps built with Bun. Simple to run, easy to extend, and
 
 ## Overview
 
-This repository hosts multiple micro‑apps under a single Bun‑powered workspace. Each app is self‑contained and can be run independently. The repository includes a GitHub Actions workflow that builds changed apps and triggers a deploy sync via a webhook.
+This repository hosts multiple micro-apps under a single Bun-powered workspace. Each app is self-contained and can be run independently. The repository includes a GitHub Actions workflow that builds changed apps and triggers a deploy sync via a webhook.
 
 ## Monorepo Apps
 
@@ -87,7 +87,7 @@ bun-apps/
 
 ## CI/CD
 
-Workflow: `.github/workflows/monorepo.yml` — [open in GitHub](https://github.com/SahajJain01/bun-apps/actions/workflows/monorepo.yml)
+Workflow: `.github/workflows/monorepo.yml` - [open in GitHub](https://github.com/SahajJain01/bun-apps/actions/workflows/monorepo.yml)
 
 - What: Build changed apps and trigger a deploy sync webhook.
 - Triggers: Pushes to `main` that touch `apps/**`, plus manual runs.
@@ -98,7 +98,7 @@ Workflow: `.github/workflows/monorepo.yml` — [open in GitHub](https://github.c
   - URL: `https://deploy.sahajjain.com/sync`
   - Header: `x-webhook-token: ${{ secrets.BUN_SYNC_TOKEN }}`
 - Secret: Add repo secret `BUN_SYNC_TOKEN` to authorize the webhook.
-- Manual: In Actions, run “Monorepo CI & Deploy”. Optional input lets you only test the webhook.
+- Manual: In Actions, run "Monorepo CI & Deploy". Optional input lets you only test the webhook.
 
 ## Add A New App
 
@@ -107,7 +107,7 @@ Workflow: `.github/workflows/monorepo.yml` — [open in GitHub](https://github.c
 3) If you need prod metadata, add `bun-app.json` with keys like `name`, `prod`, `domain`.
 4) Document usage in `apps/<your-app>/README.md`.
 
-Tip: The CI only builds apps changed in a commit. Keeping each app self‑contained speeds builds.
+Tip: The CI only builds apps changed in a commit. Keeping each app self-contained speeds builds.
 
 ## Screenshots & Visuals
 
