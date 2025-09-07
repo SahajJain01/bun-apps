@@ -1,0 +1,6 @@
+{
+  "name": "pizza-calc",
+  "prod": "bun server.js",
+  "domain": "pizza.sahajjain.com"
+}
+

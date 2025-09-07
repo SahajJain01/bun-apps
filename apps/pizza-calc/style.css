@@ -1,0 +1,71 @@
+:root{
+  --bg: #faf7f5;
+  --primary: #e74c3c;
+  --accent: #f39c12;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --card: #ffffff;
+}
+
+body {
+	font-family: "Saira", sans-serif;
+	background: var(--bg);
+	color: var(--text);
+	height: 100%;
+}
+
+.site-header{ background: #fff; }
+.brand{ color: var(--text); }
+
+.hero{
+  background: linear-gradient(135deg, rgba(231,76,60,0.95), rgba(241,196,15,0.9));
+}
+
+.flex-container {
+	display: flex;
+	justify-content: center;
+	gap: 24px;
+	padding: 20px;
+}
+.panel-left {
+	flex: 1 1 420px;
+	max-width: 520px;
+	background-color: var(--card);
+	border-radius: 10px;
+	padding: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+.fixed-panel {
+	flex: 1;
+	max-width: 300px;
+	background-color: rgba(255, 255, 255, 0.97);
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.panel-right {
+	flex: 1 1 420px;
+	max-width: 520px;
+	background-color: var(--card);
+	border-radius: 10px;
+	padding: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.results .table th,
+.results .table td{
+	vertical-align: middle;
+}
+
+.btn-dark{
+  background-color: var(--text);
+  border-color: var(--text);
+}
+.btn-dark:hover{
+  background-color: #111827;
+  border-color: #111827;
+}
+
+@media (max-width: 992px){
+	.flex-container{ flex-direction: column; }
+}

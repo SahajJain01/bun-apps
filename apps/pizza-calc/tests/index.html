@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pizza Calc Tests</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossorigin="anonymous" />
+  </head>
+  <body class="p-4">
+    <h1 class="h3">Pizza Calculator – Minimal Tests</h1>
+    <div id="out"></div>
+    <script src="../utils.js"></script>
+    <script>
+      const { formatFractionalUnits, round5 } = window.PizzaCalc;
+      const tests = [];
+      function t(name, fn){ tests.push({ name, fn }); }
+      function eq(name, a, b){ if (a !== b) throw new Error(`${name}: expected ${b} got ${a}`); }
+
+      // Fractional units tests
+      t('fraction 0', () => eq('0', formatFractionalUnits(0), '0'));
+      t('fraction 0.12~ 1/8', () => eq('1/8', formatFractionalUnits(0.12), '⅛'));
+      t('fraction 0.24~ 1/4', () => eq('1/4', formatFractionalUnits(0.24), '¼'));
+      t('fraction 1.62 -> 1 5/8', () => eq('1 5/8', formatFractionalUnits(1.62), '1 ⅝'));
+      t('fraction 2.0 -> 2', () => eq('2', formatFractionalUnits(2.0), '2'));
+
+      // Round to 5
+      t('round5 12 -> 10', () => eq('r5', round5(12), 10));
+      t('round5 13 -> 15', () => eq('r5', round5(13), 15));
+      t('round5 0 -> 0', () => eq('r5', round5(0), 0));
+
+      const out = document.getElementById('out');
+      let pass = 0; let fail = 0;
+      const list = document.createElement('ul'); list.className = 'list-group';
+      tests.forEach(({name,fn}) => {
+        const li = document.createElement('li'); li.className = 'list-group-item';
+        try { fn(); li.classList.add('list-group-item-success'); li.textContent = `PASS: ${name}`; pass++; }
+        catch(e){ li.classList.add('list-group-item-danger'); li.textContent = `FAIL: ${name} — ${e.message}`; fail++; }
+        list.appendChild(li);
+      });
+      out.appendChild(list);
+      const summary = document.createElement('p');
+      summary.className = 'mt-3';
+      summary.textContent = `${pass} passed, ${fail} failed.`;
+      out.appendChild(summary);
+    </script>
+  </body>
+  </html>
+
